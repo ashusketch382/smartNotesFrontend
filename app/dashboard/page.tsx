@@ -17,10 +17,10 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth.loading && !auth.user) {
+    if (!auth?.user && !auth?.loading) {
       router.push('/signin');
     }
-  }, [auth.loading, auth.user]);
+  }, [auth?.user, auth?.loading, router]);
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [page, setPage] = useState(1);
@@ -59,7 +59,7 @@ export default function Dashboard() {
       try {
         const token = localStorage.getItem('token');
         const res = await axios.get(`http://localhost:5000/api/notes?page=${page}`, {
-          headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
         });
         setNotes(res.data.notes);
         setTotalPages(res.data.pages);
@@ -67,16 +67,16 @@ export default function Dashboard() {
         console.error('Error fetching notes:', err);
       }
     };
-    fetchNotes();
-  }, [page]);
+    if(auth?.user) fetchNotes();
+  }, [page, auth?.user]);
 
-  if (auth.loading) return <div>Loading...</div>;
+  if(auth?.loading) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto p-4">
       <header className="flex justify-between items-center bg-gray-800 text-white p-4 rounded-lg shadow-md mb-4">
-        <div className="text-xl font-bold">Welcome, {auth.user?.email}!</div>
-        <button onClick={auth.logout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        <div className="text-xl font-bold">Welcome, {auth?.user?.email}!</div>
+        <button onClick={auth?.logout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           Logout
         </button>
       </header>

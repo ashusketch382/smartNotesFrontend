@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Fetch user data
       axios
         .get('http://localhost:4000/api/auth/me', {
           headers: { Authorization: `Bearer ${token}` },
@@ -36,20 +35,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setLoading(false);
         })
         .catch((error) => {
-          console.error('Failed to fetch user:', error);
-          localStorage.removeItem('token'); // Clear invalid token
+          console.error('Failed to fetch user:', error.response?.data || error.message);
+          if (error.response?.status === 401) {
+            console.log('AuthContext: Invalid token, clearing...');
+            localStorage.removeItem('token');
+            setUser(null);
+          }
           setLoading(false);
-          router.push('/login');
+          router.push('/signin');
         });
     } else {
       setLoading(false);
     }
-  }, [router]);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    router.push('/login');
+    router.push('/signin');
   };
 
   return (
