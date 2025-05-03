@@ -17,9 +17,11 @@ export default function EditNote() {
     if (id !== 'new') {
       const fetchNote = async () => {
         const token = localStorage.getItem('token');
+        console.log('Fetching note with ID:', id);
         const res = await axios.get(`http://localhost:5000/api/notes/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('Note fetched:', res.data);
         setTitle(res.data.title);
         setTags(res.data.tags.join(', '));
         const contentState = convertFromRaw(JSON.parse(res.data.content));
@@ -29,13 +31,15 @@ export default function EditNote() {
     }
   }, [id]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     const content = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
     const noteData = { title, content, tags: tags.split(',').map((tag) => tag.trim()) };
+    console.log('Submitting note data:', noteData);
     try {
       if (id === 'new') {
+        console.log(noteData);
         await axios.post('http://localhost:5000/api/notes', noteData, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -46,7 +50,7 @@ export default function EditNote() {
       }
       router.push('/dashboard');
     } catch (err) {
-      console.error(err);
+      console.error('Error submitting note:', err);
     }
   };
 
