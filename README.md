@@ -69,4 +69,4 @@ npm run start
 ## Notes
 
 - The app uses `AuthContext` for authentication, redirecting unauthenticated users to `/signin`.
-- Ensure MongoDB is set up via Docker or another method (see Backend README).
+- Ensure MongoDB is set up via Docker or another method (see [Backend](https://github.com/ashusketch382/smartNotesBackend) README).
