@@ -15,7 +15,7 @@ export interface AuthContextType {
   logout: () => void;
   loading: boolean;
 }
-// @ts-ignore
+
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

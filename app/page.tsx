@@ -1,9 +1,4 @@
-import Login from "./pages/login";
-import Signup from "./pages/signup";
-
+// app/page.tsx
 export default function Home() {
-  return (<>
-      hi 
-    </>
-  );
+  return <h1>Welcome to Smart Notes</h1>;
 }
