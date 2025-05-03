@@ -16,6 +16,22 @@ export default function Dashboard() {
     const [totalPages, setTotalPages] = useState(1);
     const router = useRouter();
 
+    const handleDelete = async (id: string) => {
+        if (!confirm("Are you sure you want to delete this note?")) return;
+    
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:5000/api/notes/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+    
+            setNotes(notes.filter(note => note._id !== id));
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
+    };
+
+    
     useEffect(() => {
         const fetchNotes = async () => {
             try {
@@ -43,6 +59,9 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-500">{note.tags.join(', ')}</p>
                 <button onClick={() => router.push(`/note/${note._id}`)} className="text-blue-500 mt-2">
                    Edit
+                </button>
+                <button onClick={() => handleDelete(note._id)} className="text-red-500 mt-2 ml-2">
+                    Delete
                 </button>
                </div>
             ))}
