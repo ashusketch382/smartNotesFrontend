@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { AuthContext, AuthContextType } from '../context/AuthContext/page';
+import { AuthContext, AuthContextType } from "@/contexts/AuthContext";
 
 interface Note {
   _id: string;
