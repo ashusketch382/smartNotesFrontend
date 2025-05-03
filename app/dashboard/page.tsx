@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '../context/AuthContext/page';
+import { AuthContext, AuthContextType } from '../context/AuthContext/page';
 
 interface Note {
   _id: string;
@@ -13,7 +13,7 @@ interface Note {
 }
 
 export default function Dashboard() {
-  const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext) as AuthContextType;
   const router = useRouter();
 
   useEffect(() => {

@@ -9,13 +9,13 @@ interface User {
   email: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   logout: () => void;
   loading: boolean;
 }
-
+// @ts-ignore
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
