@@ -15,6 +15,19 @@ export default function Dashboard() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearch = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get(`http://localhost:5000/api/notes/search?query=${searchQuery}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+            setNotes(res.data);
+       } catch (err) {
+            console.error(err);
+       }
+    };
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this note?")) return;
@@ -52,6 +65,7 @@ export default function Dashboard() {
        <div className="container mx-auto p-4">
         <h1 className="text-3xl mb-4">Your Notes</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <input type="text" placeholder="Search notes..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} className="mb-4 p-2 border w-full"/>
             {notes.map((note) => (
                 <div key={note._id} className="border p-4 rounded">
                 <h2 className="text-xl">{note.title}</h2>
