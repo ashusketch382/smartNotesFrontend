@@ -2,11 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export default function EditNote() {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const router = useRouter();
   const { id } = useParams();
 
@@ -18,16 +21,18 @@ export default function EditNote() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTitle(res.data.title);
-        setContent(res.data.content);
         setTags(res.data.tags.join(', '));
+        const contentState = convertFromRaw(JSON.parse(res.data.content));
+        setEditorState(EditorState.createWithContent(contentState));
       };
       fetchNote();
     }
   }, [id]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    const content = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
     const noteData = { title, content, tags: tags.split(',').map((tag) => tag.trim()) };
     try {
       if (id === 'new') {
@@ -56,11 +61,11 @@ export default function EditNote() {
           onChange={(e) => setTitle(e.target.value)}
           className="mb-4 p-2 border w-full"
         />
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="mb-4 p-2 border w-full h-40"
+        <Editor
+          editorState={editorState}
+          onEditorStateChange={setEditorState}
+          wrapperClassName="mb-4 border"
+          editorClassName="p-2 h-40"
         />
         <input
           type="text"
