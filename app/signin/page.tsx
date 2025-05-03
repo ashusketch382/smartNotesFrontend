@@ -14,7 +14,7 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       auth?.setUser({ id: res.data.user.id, email: res.data.user.email }); // Update user state
       router.push('/dashboard');

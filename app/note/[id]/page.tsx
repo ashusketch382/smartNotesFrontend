@@ -18,7 +18,7 @@ export default function EditNote() {
       const fetchNote = async () => {
         const token = localStorage.getItem('token');
         console.log('Fetching note with ID:', id);
-        const res = await axios.get(`http://localhost:5000/api/notes/${id}`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/notes/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log('Note fetched:', res.data);
@@ -40,11 +40,11 @@ export default function EditNote() {
     try {
       if (id === 'new') {
         console.log(noteData);
-        await axios.post('http://localhost:5000/api/notes', noteData, {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/notes`, noteData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await axios.put(`http://localhost:5000/api/notes/${id}`, noteData, {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/notes/${id}`, noteData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }

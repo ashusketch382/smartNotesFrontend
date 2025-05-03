@@ -30,7 +30,7 @@ export default function Dashboard() {
   const handleSearch = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:5000/api/notes/search?query=${searchQuery}`, {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/notes/search?query=${searchQuery}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotes(res.data);
@@ -44,7 +44,7 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/notes/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -58,7 +58,7 @@ export default function Dashboard() {
     const fetchNotes = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:5000/api/notes?page=${page}`, {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/notes?page=${page}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         setNotes(res.data.notes);
