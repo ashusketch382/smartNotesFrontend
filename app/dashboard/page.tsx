@@ -42,7 +42,7 @@ export default function Dashboard() {
             setNotes(res.data.notes);
             setTotalPages(res.data.pages);
            } catch (err) {
-                router.push('/login');
+                router.push('/signin');
            }
         };
         fetchNotes();
